@@ -1,0 +1,82 @@
+set dotenv-load := true
+
+CIRCUIT_DIR := "circuits"
+CONTRACT_WASM := "target/wasm32v1-none/release/veilance_verifier.wasm"
+NETWORK := env_var_or_default("STELLAR_NETWORK", "testnet")
+ACCOUNT := env_var_or_default("STELLAR_ACCOUNT", "veilance-smoke")
+CONTRACT_ID_FILE := ".contract_id"
+
+# Show available commands
+default:
+    @just --list
+
+# Verify toolchain versions
+check-tools:
+    @echo "nargo: $(nargo --version)"
+    @echo "bb: $(bb --version)"
+    @echo "stellar: $(stellar --version)"
+    @rustup target list --installed | grep wasm32v1-none || echo "MISSING: wasm32v1-none"
+
+# Compile Noir circuit + generate vk, proof, public_inputs
+build-circuits:
+    cd {{CIRCUIT_DIR}} && nargo compile
+    cd {{CIRCUIT_DIR}} && nargo execute
+    cd {{CIRCUIT_DIR}} && bb write_vk \
+        --scheme ultra_honk \
+        --oracle_hash keccak \
+        --bytecode_path ./target/smoke_test.json \
+        --output_path ./target \
+        --output_format bytes_and_fields
+    cd {{CIRCUIT_DIR}} && bb prove \
+        --scheme ultra_honk \
+        --oracle_hash keccak \
+        --bytecode_path ./target/smoke_test.json \
+        --witness_path ./target/smoke_test.gz \
+        --output_path ./target \
+        --output_format bytes_and_fields
+    @echo "Artifacts: $(ls circuits/target/vk circuits/target/proof circuits/target/public_inputs)"
+
+# Build Soroban contract WASM
+build-contract:
+    stellar contract build --manifest-path contracts/Cargo.toml
+
+# Run integration tests
+test:
+    cargo test -p veilance-verifier --release -- --nocapture
+
+# Full local end-to-end: circuits → contract → tests
+e2e: build-circuits build-contract test
+
+# Fund a new testnet account (run once)
+fund:
+    stellar keys generate {{ACCOUNT}} --network testnet || true
+    stellar keys address {{ACCOUNT}}
+    @echo "Funding via Friendbot..."
+    stellar friendbot --network testnet $(stellar keys address {{ACCOUNT}})
+
+# Deploy contract to testnet with VK from circuits/target/vk
+deploy:
+    stellar contract deploy \
+        --wasm {{CONTRACT_WASM}} \
+        --source {{ACCOUNT}} \
+        --network {{NETWORK}} \
+        -- \
+        --vk_bytes-file-path circuits/target/vk \
+    | tee {{CONTRACT_ID_FILE}}
+    @echo "Contract deployed: $(cat {{CONTRACT_ID_FILE}})"
+
+# Invoke verify_proof on a deployed contract
+verify contract_id=`cat .contract_id 2>/dev/null || echo ""`:
+    stellar contract invoke \
+        --id {{contract_id}} \
+        --source {{ACCOUNT}} \
+        --network {{NETWORK}} \
+        --send yes \
+        -- \
+        verify_proof \
+        --public_inputs-file-path circuits/target/public_inputs \
+        --proof_bytes-file-path circuits/target/proof
+    @echo "Proof verified on-chain!"
+
+# Full testnet pipeline: fund (if needed) → deploy → verify
+testnet: build-circuits build-contract deploy verify
