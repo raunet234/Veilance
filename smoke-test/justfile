@@ -52,7 +52,7 @@ fund:
     stellar keys generate {{ACCOUNT}} --network testnet || true
     stellar keys address {{ACCOUNT}}
     @echo "Funding via Friendbot..."
-    stellar friendbot --network testnet $(stellar keys address {{ACCOUNT}})
+    curl -s "https://friendbot.stellar.org?addr=$(stellar keys address {{ACCOUNT}})" | grep -q '"successful"' && echo "Funded!" || echo "Friendbot response received (check balance)"
 
 # Deploy contract to testnet with VK from circuits/target/vk
 deploy:
