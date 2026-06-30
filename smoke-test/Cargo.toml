@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "contracts",
+    "crates/ultrahonk-soroban-verifier",
+]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = { version = "26.0.1", default-features = false }
