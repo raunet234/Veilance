@@ -1,1 +1,1 @@
-// placeholder — implementation added in Task 5
+// Stub — implementation added in Task 5
