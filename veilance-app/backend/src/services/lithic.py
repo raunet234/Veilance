@@ -91,7 +91,7 @@ class LithicService:
         # Build card creation parameters
         create_params = {
             "type": "SINGLE_USE",
-            "memo": memo or "payzee Single-Use Card",
+            "memo": memo or "Veilance Single-Use Card",
         }
         
         # Add spend limit if specified

@@ -90,7 +90,7 @@ export default function Landing() {
 
           {/* Secondary — dark bordered pill */}
           <a
-            href="https://github.com/raunet234/payzee"
+            href="https://github.com/raunet234/Veilance"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2.5 bg-white/[0.06] text-white border border-white/[0.12] rounded-full font-semibold text-base px-8 py-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-200"
@@ -313,7 +313,7 @@ export default function Landing() {
           <a href="#features" className="text-sm text-[#555] hover:text-white transition-colors duration-200">Features</a>
           <a href="#developers" className="text-sm text-[#555] hover:text-white transition-colors duration-200">Developers</a>
           <a href="#docs" className="text-sm text-[#555] hover:text-white transition-colors duration-200">Docs</a>
-          <a href="https://github.com/raunet234/payzee" target="_blank" rel="noreferrer" className="text-sm text-[#555] hover:text-white transition-colors duration-200">GitHub</a>
+          <a href="https://github.com/raunet234/Veilance" target="_blank" rel="noreferrer" className="text-sm text-[#555] hover:text-white transition-colors duration-200">GitHub</a>
         </div>
         <div className="text-[13px] text-[#444]">© 2025 Veilance · Powered by Stellar</div>
       </footer>

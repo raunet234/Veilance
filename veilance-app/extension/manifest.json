@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Payzee",
+  "name": "Veilance",
   "version": "1.0.8",
-  "description": "Pay at any checkout using USDC on Stellar - ZK proof verified payments",
+  "description": "Pay at any checkout using XLM on Stellar - ZK proof verified payments",
 
   "icons": {
     "16": "icon16.png",

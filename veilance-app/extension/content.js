@@ -1,9 +1,9 @@
-console.log('Payzee Extension: Content script loaded');
+console.log('Veilance Extension: Content script loaded');
 
 // Use localhost for development, production URL for deployed version
 // Set DEV_MODE to true for local development
 const DEV_MODE = true;
-const DASHBOARD_URL = DEV_MODE ? 'http://localhost:3001' : 'https://payzee-tan.vercel.app';
+const DASHBOARD_URL = DEV_MODE ? 'http://localhost:3001' : 'https://veilance.vercel.app';
 let cardDetails = null;
 let productDetails = null;
 
@@ -25,7 +25,7 @@ function extractMerchantData() {
       url: window.location.href
     };
   } catch (error) {
-    console.error('Payzee: Error extracting merchant data:', error);
+    console.error('Veilance: Error extracting merchant data:', error);
     return {
       name: 'MERCHANT',
       domain: 'unknown.com',
@@ -56,7 +56,7 @@ function extractProductDetails() {
       const text = element.textContent.trim();
       if (text.length > 5 && text.length < 100) {
         details.productName = text;
-        console.log('Payzee: Found product name from hotel-name class:', text);
+        console.log('Veilance: Found product name from hotel-name class:', text);
         break;
       }
     }
@@ -88,7 +88,7 @@ function extractProductDetails() {
             heading.className.toLowerCase().includes('property') ||
             heading.className.toLowerCase().includes('name')) {
           details.productName = text;
-          console.log('Payzee: Found product name from heading:', text);
+          console.log('Veilance: Found product name from heading:', text);
           break;
         }
       }
@@ -101,7 +101,7 @@ function extractProductDetails() {
         const title = metaProperty.content.split('|')[0].trim();
         if (title.length > 5 && title.length < 100) {
           details.productName = title;
-          console.log('Payzee: Found product name from meta:', title);
+          console.log('Veilance: Found product name from meta:', title);
         }
       }
     }
@@ -109,7 +109,7 @@ function extractProductDetails() {
     // Extract main product image
     // First check for background images in elements (common in carousels)
     const elementsWithBg = document.querySelectorAll('[style*="background-image"], [class*="carousel" i], [class*="slider" i], [class*="hero" i]');
-    console.log('Payzee: Found', elementsWithBg.length, 'elements with potential background images');
+    console.log('Veilance: Found', elementsWithBg.length, 'elements with potential background images');
     
     for (const element of elementsWithBg) {
       const style = window.getComputedStyle(element);
@@ -120,7 +120,7 @@ function extractProductDetails() {
         const urlMatch = bgImage.match(/url\(['"]?(.*?)['"]?\)/);
         if (urlMatch && urlMatch[1]) {
           const imageUrl = urlMatch[1];
-          console.log('Payzee: Found background image:', imageUrl.substring(0, 80));
+          console.log('Veilance: Found background image:', imageUrl.substring(0, 80));
           
           // Check if it's a valid image URL
           if (!imageUrl.toLowerCase().includes('logo') && 
@@ -129,7 +129,7 @@ function extractProductDetails() {
               (imageUrl.includes('.jpg') || imageUrl.includes('.jpeg') || 
                imageUrl.includes('.png') || imageUrl.includes('.webp'))) {
             details.image = imageUrl;
-            console.log('Payzee: ✅ Using background image:', imageUrl);
+            console.log('Veilance: ✅ Using background image:', imageUrl);
             break;
           }
         }
@@ -139,7 +139,7 @@ function extractProductDetails() {
     // If no background image found, check regular img tags
     if (!details.image) {
       const images = document.querySelectorAll('img[src]');
-      console.log('Payzee: Found', images.length, 'images on page');
+      console.log('Veilance: Found', images.length, 'images on page');
       
       for (const img of images) {
         // Convert relative URLs to absolute
@@ -148,7 +148,7 @@ function extractProductDetails() {
         const width = img.naturalWidth || img.width || 0;
         const height = img.naturalHeight || img.height || 0;
         
-        console.log('Payzee: Checking image:', {
+        console.log('Veilance: Checking image:', {
           src: src.substring(0, 80),
           alt,
           width,
@@ -169,14 +169,14 @@ function extractProductDetails() {
              img.className.toLowerCase().includes('main') ||
              width > 400)) {
           details.image = src;
-          console.log('Payzee: ✅ Found product image:', src, 'dimensions:', width, 'x', height);
+          console.log('Veilance: ✅ Found product image:', src, 'dimensions:', width, 'x', height);
           break;
         }
       }
       
       // If no specific image found, try to get the largest image on page
       if (!details.image) {
-        console.log('Payzee: No specific image found, looking for largest...');
+        console.log('Veilance: No specific image found, looking for largest...');
         let largestImage = null;
         let maxSize = 0;
         
@@ -192,15 +192,15 @@ function extractProductDetails() {
               !src.toLowerCase().includes('sprite')) {
             maxSize = size;
             largestImage = src;
-            console.log('Payzee: New largest candidate:', src, 'size:', width, 'x', height);
+            console.log('Veilance: New largest candidate:', src, 'size:', width, 'x', height);
           }
         }
         
         if (largestImage) {
           details.image = largestImage;
-          console.log('Payzee: ✅ Using largest image:', largestImage);
+          console.log('Veilance: ✅ Using largest image:', largestImage);
         } else {
-          console.log('Payzee: ❌ No suitable image found');
+          console.log('Veilance: ❌ No suitable image found');
         }
       }
     }
@@ -260,10 +260,10 @@ function extractProductDetails() {
       details.duration = durationMatch[1];
     }
     
-    console.log('Payzee: Extracted product details:', details);
+    console.log('Veilance: Extracted product details:', details);
     return details;
   } catch (error) {
-    console.error('Payzee: Error extracting product details:', error);
+    console.error('Veilance: Error extracting product details:', error);
     return null;
   }
 }
@@ -307,7 +307,7 @@ function extractTotalAmount() {
   try {
     const allText = document.body.innerText;
     
-    console.log('=== PAYZEE DEBUG: Starting amount extraction ===');
+    console.log('=== VEILANCE DEBUG: Starting amount extraction ===');
     console.log('Page text length:', allText.length);
     console.log('Text snippet around "Total":', allText.substring(allText.toLowerCase().indexOf('total') - 50, allText.toLowerCase().indexOf('total') + 200));
     
@@ -443,7 +443,7 @@ function extractTotalAmount() {
     console.log('=== NO AMOUNT FOUND ===');
     return null;
   } catch (error) {
-    console.error('Payzee: Error extracting amount:', error);
+    console.error('Veilance: Error extracting amount:', error);
     return null;
   }
 }
@@ -462,14 +462,14 @@ async function convertToUSD(amount, fromCurrency) {
     if (data.result === 'success' && data.rates && data.rates.USD) {
       const usdRate = data.rates.USD;
       const convertedAmount = amount * usdRate;
-      console.log(`Payzee: Converted ${amount} ${fromCurrency} to ${convertedAmount.toFixed(2)} USD`);
+      console.log(`Veilance: Converted ${amount} ${fromCurrency} to ${convertedAmount.toFixed(2)} USD`);
       return parseFloat(convertedAmount.toFixed(2));
     }
     
-    console.warn('Payzee: Currency conversion failed, using original amount');
+    console.warn('Veilance: Currency conversion failed, using original amount');
     return amount;
   } catch (error) {
-    console.error('Payzee: Currency conversion error:', error);
+    console.error('Veilance: Currency conversion error:', error);
     return amount;
   }
 }
@@ -513,7 +513,7 @@ function createPayButton() {
       <path d="M2 17L12 22L22 17" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M2 12L12 17L22 12" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    Pay with Payzee
+    Pay with Veilance
   `;
   
   button.style.cssText = `
@@ -562,8 +562,8 @@ async function handlePayWithCrypto() {
   const merchant = extractMerchantData();
   productDetails = extractProductDetails();
   
-  console.log('Payzee: Extracted amount data:', amountData);
-  console.log('Payzee: Extracted product details:', productDetails);
+  console.log('Veilance: Extracted amount data:', amountData);
+  console.log('Veilance: Extracted product details:', productDetails);
   
   if (!amountData) {
     openDashboard(null, null, merchant);
@@ -576,7 +576,7 @@ async function handlePayWithCrypto() {
   // Convert to USD
   const usdAmount = await convertToUSD(amountData.amount, amountData.currency);
   
-  console.log(`Payzee: Converted to USD: $${usdAmount}`);
+  console.log(`Veilance: Converted to USD: $${usdAmount}`);
   
   openDashboard(usdAmount, amountData, merchant);
 }
@@ -609,7 +609,7 @@ function openDashboard(usdAmount, originalAmount, merchant) {
   // Open as small popup window (wallet extensions CAN inject here)
   dashboardWindow = window.open(
     dashboardUrl,
-    'payzee-dashboard',
+    'veilance-dashboard',
     `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=no,scrollbars=no,toolbar=no,menubar=no,location=no,status=no`
   );
 
@@ -636,7 +636,7 @@ function openDashboard(usdAmount, originalAmount, merchant) {
 // Show floating card details panel (fallback when auto-fill can't access fields)
 function showCardDetailsPanel(card) {
   // Remove existing panel
-  const existing = document.getElementById('payzee-card-panel');
+  const existing = document.getElementById('veilance-card-panel');
   if (existing) existing.remove();
 
   const pan = card.pan || '';
@@ -645,7 +645,7 @@ function showCardDetailsPanel(card) {
   const cvv = card.cvv || '';
 
   const panel = document.createElement('div');
-  panel.id = 'payzee-card-panel';
+  panel.id = 'veilance-card-panel';
   panel.style.cssText = `
     position: fixed;
     bottom: 20px;
@@ -657,7 +657,7 @@ function showCardDetailsPanel(card) {
     border-radius: 16px;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 60px rgba(74, 222, 128, 0.08);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    animation: payzee-panel-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: veilance-panel-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   `;
 
@@ -666,14 +666,14 @@ function showCardDetailsPanel(card) {
       <span style="font-size: 14px; font-weight: 700; color: #fff;">
         Pay<span style="color: #4ade80;">zee</span> — Your Card
       </span>
-      <button id="payzee-card-panel-close" style="background: none; border: none; color: #555; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1;">✕</button>
+      <button id="veilance-card-panel-close" style="background: none; border: none; color: #555; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1;">✕</button>
     </div>
     <div style="padding: 18px;">
       <div style="margin-bottom: 14px;">
         <div style="font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">Card Number</div>
         <div style="display: flex; gap: 8px; align-items: center;">
           <code style="flex: 1; padding: 10px 12px; background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 15px; font-family: 'Monaco', 'Courier New', monospace; letter-spacing: 1px;">${pan}</code>
-          <button class="payzee-copy-btn" data-copy="${pan}" style="padding: 8px 14px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 52px; transition: all 0.2s;">Copy</button>
+          <button class="veilance-copy-btn" data-copy="${pan}" style="padding: 8px 14px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 52px; transition: all 0.2s;">Copy</button>
         </div>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
@@ -681,19 +681,19 @@ function showCardDetailsPanel(card) {
           <div style="font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">Expiry</div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <code style="flex: 1; padding: 10px 12px; background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 15px; font-family: monospace;">${expMonth}/${expYear}</code>
-            <button class="payzee-copy-btn" data-copy="${expMonth}/${expYear}" style="padding: 8px 12px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 46px; transition: all 0.2s;">Copy</button>
+            <button class="veilance-copy-btn" data-copy="${expMonth}/${expYear}" style="padding: 8px 12px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 46px; transition: all 0.2s;">Copy</button>
           </div>
         </div>
         <div>
           <div style="font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">CVV</div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <code style="flex: 1; padding: 10px 12px; background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 15px; font-family: monospace;">${cvv}</code>
-            <button class="payzee-copy-btn" data-copy="${cvv}" style="padding: 8px 12px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 46px; transition: all 0.2s;">Copy</button>
+            <button class="veilance-copy-btn" data-copy="${cvv}" style="padding: 8px 12px; background: #4ade80; color: #080808; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 46px; transition: all 0.2s;">Copy</button>
           </div>
         </div>
       </div>
       <div style="padding: 10px 12px; background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.12); border-radius: 8px; font-size: 12px; color: #777; line-height: 1.5;">
-        💡 Paste these details into the payment form. For cardholder name, use <strong style="color: #ccc;">Payzee User</strong>.
+        💡 Paste these details into the payment form. For cardholder name, use <strong style="color: #ccc;">Veilance User</strong>.
       </div>
     </div>
   `;
@@ -701,15 +701,15 @@ function showCardDetailsPanel(card) {
   document.body.appendChild(panel);
 
   // Inject animation styles if not already present
-  if (!document.getElementById('payzee-panel-styles')) {
+  if (!document.getElementById('veilance-panel-styles')) {
     const style = document.createElement('style');
-    style.id = 'payzee-panel-styles';
+    style.id = 'veilance-panel-styles';
     style.textContent = `
-      @keyframes payzee-panel-in {
+      @keyframes veilance-panel-in {
         from { opacity: 0; transform: translateY(40px) scale(0.95); }
         to { opacity: 1; transform: translateY(0) scale(1); }
       }
-      @keyframes payzee-panel-out {
+      @keyframes veilance-panel-out {
         from { opacity: 1; transform: translateY(0) scale(1); }
         to { opacity: 0; transform: translateY(40px) scale(0.95); }
       }
@@ -718,13 +718,13 @@ function showCardDetailsPanel(card) {
   }
 
   // Close button
-  document.getElementById('payzee-card-panel-close').addEventListener('click', () => {
-    panel.style.animation = 'payzee-panel-out 0.25s ease-in forwards';
+  document.getElementById('veilance-card-panel-close').addEventListener('click', () => {
+    panel.style.animation = 'veilance-panel-out 0.25s ease-in forwards';
     setTimeout(() => panel.remove(), 250);
   });
 
   // Copy buttons with ✓ feedback
-  panel.querySelectorAll('.payzee-copy-btn').forEach(btn => {
+  panel.querySelectorAll('.veilance-copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       navigator.clipboard.writeText(btn.dataset.copy);
       const original = btn.textContent;
@@ -742,7 +742,7 @@ function showCardDetailsPanel(card) {
   // Auto-dismiss after 60 seconds
   setTimeout(() => {
     if (panel.parentNode) {
-      panel.style.animation = 'payzee-panel-out 0.25s ease-in forwards';
+      panel.style.animation = 'veilance-panel-out 0.25s ease-in forwards';
       setTimeout(() => panel.remove(), 250);
     }
   }, 60000);
@@ -750,7 +750,7 @@ function showCardDetailsPanel(card) {
 
 // Function to auto-fill card details using native setters and events
 function autoFillCardDetails(card) {
-  console.log('Payzee: Starting autofill with card:', card);
+  console.log('Veilance: Starting autofill with card:', card);
   let filledCount = 0;
   
   // Helper function to set value and trigger events
@@ -776,11 +776,11 @@ function autoFillCardDetails(card) {
       // Also dispatch blur for some forms
       element.dispatchEvent(new Event('blur', { bubbles: true }));
       
-      console.log(`Payzee: Filled ${element.name || element.id || 'field'} with value`);
+      console.log(`Veilance: Filled ${element.name || element.id || 'field'} with value`);
       filledCount++;
       return true;
     } catch (error) {
-      console.error('Payzee: Error setting input value:', error);
+      console.error('Veilance: Error setting input value:', error);
       return false;
     }
   }
@@ -808,7 +808,7 @@ function autoFillCardDetails(card) {
   for (const selector of cardNumberSelectors) {
     cardNumberField = document.querySelector(selector);
     if (cardNumberField) {
-      console.log('Payzee: Found card number field:', selector);
+      console.log('Veilance: Found card number field:', selector);
       break;
     }
   }
@@ -816,7 +816,7 @@ function autoFillCardDetails(card) {
   if (cardNumberField && card.pan) {
     setInputValue(cardNumberField, card.pan);
   } else {
-    console.warn('Payzee: Card number field not found or card.pan missing (likely inside payment iframe)');
+    console.warn('Veilance: Card number field not found or card.pan missing (likely inside payment iframe)');
   }
   
   // Find expiry field(s)
@@ -835,7 +835,7 @@ function autoFillCardDetails(card) {
   for (const selector of expirySelectors) {
     expiryField = document.querySelector(selector);
     if (expiryField) {
-      console.log('Payzee: Found expiry field:', selector);
+      console.log('Veilance: Found expiry field:', selector);
       break;
     }
   }
@@ -845,22 +845,22 @@ function autoFillCardDetails(card) {
   const yearField = document.querySelector('input[name*="year" i], select[name*="year" i], input[placeholder="YY"], input[aria-label*="year" i]');
   
   if (monthField && yearField && card.exp_month && card.exp_year) {
-    console.log('Payzee: Found separate month/year fields');
+    console.log('Veilance: Found separate month/year fields');
     // Separate fields
     const monthValue = card.exp_month.toString().padStart(2, '0');
     const yearValue = card.exp_year.toString().slice(-2); // Last 2 digits (2032 -> 32)
     
-    console.log('Payzee: Filling month:', monthValue, 'year:', yearValue);
+    console.log('Veilance: Filling month:', monthValue, 'year:', yearValue);
     setInputValue(monthField, monthValue);
     setInputValue(yearField, yearValue);
   } else if (expiryField && card.exp_month && card.exp_year) {
     // Single combined field (MM/YY format)
-    console.log('Payzee: Found combined expiry field');
+    console.log('Veilance: Found combined expiry field');
     const expiry = `${card.exp_month.toString().padStart(2, '0')}/${card.exp_year.toString().slice(-2)}`;
-    console.log('Payzee: Filling expiry:', expiry);
+    console.log('Veilance: Filling expiry:', expiry);
     setInputValue(expiryField, expiry);
   } else {
-    console.warn('Payzee: Expiry field(s) not found or missing data');
+    console.warn('Veilance: Expiry field(s) not found or missing data');
   }
   
   // Find CVV/CVC field
@@ -880,7 +880,7 @@ function autoFillCardDetails(card) {
   for (const selector of cvvSelectors) {
     cvvField = document.querySelector(selector);
     if (cvvField) {
-      console.log('Payzee: Found CVV field:', selector);
+      console.log('Veilance: Found CVV field:', selector);
       break;
     }
   }
@@ -888,7 +888,7 @@ function autoFillCardDetails(card) {
   if (cvvField && card.cvv) {
     setInputValue(cvvField, card.cvv);
   } else {
-    console.warn('Payzee: CVV field not found');
+    console.warn('Veilance: CVV field not found');
   }
   
   // Find cardholder name field (optional)
@@ -907,7 +907,7 @@ function autoFillCardDetails(card) {
   for (const selector of nameSelectors) {
     nameField = document.querySelector(selector);
     if (nameField) {
-      console.log('Payzee: Found name field:', selector);
+      console.log('Veilance: Found name field:', selector);
       break;
     }
   }
@@ -916,7 +916,7 @@ function autoFillCardDetails(card) {
     setInputValue(nameField, card.cardholder_name);
   }
   
-  console.log(`Payzee: Autofill completed. Fields filled: ${filledCount}`);
+  console.log(`Veilance: Autofill completed. Fields filled: ${filledCount}`);
   
   if (filledCount > 0) {
     showNotification('Card details filled automatically!', 'success');
@@ -925,7 +925,7 @@ function autoFillCardDetails(card) {
   } else {
     // Payment form is likely inside a cross-origin iframe (Adyen, Stripe, etc.)
     // Show floating card panel so user can copy-paste manually
-    console.log('Payzee: No fields filled — showing card details panel for manual entry');
+    console.log('Veilance: No fields filled — showing card details panel for manual entry');
     showNotification('Card created! Copy details into the payment form.', 'success');
     showCardDetailsPanel(card);
   }
@@ -934,10 +934,10 @@ function autoFillCardDetails(card) {
 // Function to show confirm transaction button
 function showConfirmTransactionButton() {
   // Check if button already exists
-  if (document.getElementById('payzee-confirm-button')) return;
+  if (document.getElementById('veilance-confirm-button')) return;
   
   const button = document.createElement('button');
-  button.id = 'payzee-confirm-button';
+  button.id = 'veilance-confirm-button';
   button.innerHTML = `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px;">
       <path d="M9 11L12 14L22 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -964,13 +964,13 @@ function showConfirmTransactionButton() {
     display: flex;
     align-items: center;
     transition: all 0.3s ease;
-    animation: payzee-slide-in 0.3s ease-out;
+    animation: veilance-slide-in 0.3s ease-out;
   `;
   
   // Add slide-in animation
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes payzee-slide-in {
+    @keyframes veilance-slide-in {
       from {
         transform: translateY(100px);
         opacity: 0;
@@ -997,7 +997,7 @@ function showConfirmTransactionButton() {
   
   button.addEventListener('click', handleConfirmTransaction);
   
-  // Hide the "Pay with Payzee" button if it exists
+  // Hide the "Pay with Veilance" button if it exists
   const payButton = document.getElementById('stellar-pay-button');
   if (payButton) {
     payButton.style.display = 'none';
@@ -1013,7 +1013,7 @@ let dashboardWindow = null;
 
 // Handle confirm transaction button click
 async function handleConfirmTransaction() {
-  const button = document.getElementById('payzee-confirm-button');
+  const button = document.getElementById('veilance-confirm-button');
   if (!button) return;
   
   if (!cardDetails) {
@@ -1033,7 +1033,7 @@ async function handleConfirmTransaction() {
       border-top: 3px solid white;
       border-radius: 50%;
       margin-right: 8px;
-      animation: payzee-spin 1s linear infinite;
+      animation: veilance-spin 1s linear infinite;
     "></div>
     Processing...
   `;
@@ -1047,32 +1047,32 @@ async function handleConfirmTransaction() {
     timestamp: Date.now()
   };
   
-  console.log('Payzee: Sending confirm transaction message to dashboard');
+  console.log('Veilance: Sending confirm transaction message to dashboard');
   
   // Send to dashboard popup window
   if (dashboardWindow && !dashboardWindow.closed) {
-    console.log('Payzee: Sending to dashboard popup');
+    console.log('Veilance: Sending to dashboard popup');
     dashboardWindow.postMessage(message, '*');
   } else {
-    console.warn('Payzee: Dashboard popup not available');
+    console.warn('Veilance: Dashboard popup not available');
   }
   
-  console.log('Payzee: Confirm transaction message sent');
+  console.log('Veilance: Confirm transaction message sent');
 }
 
 // Handle messages from dashboard
 function handleDashboardMessage(event) {
   // Verify origin (allow localhost on any port for dev)
   if (!event.origin.includes('localhost')) {
-    console.log('Payzee: Ignoring message from:', event.origin);
+    console.log('Veilance: Ignoring message from:', event.origin);
     return;
   }
   
-  console.log('Payzee: Message received:', event.data);
+  console.log('Veilance: Message received:', event.data);
   
   if (event.data.type === 'CARD_READY') {
     cardDetails = event.data.card;
-    console.log('Payzee: Card created successfully');
+    console.log('Veilance: Card created successfully');
     
     // Close the popup window
     if (dashboardWindow && !dashboardWindow.closed) {
@@ -1095,10 +1095,10 @@ function handleDashboardMessage(event) {
     // Show confirmation overlay on merchant page
     hideLoadingModal();
     showConfirmationModal(event.data.card, productDetails);
-    console.log('Payzee: Payment completed successfully');
+    console.log('Veilance: Payment completed successfully');
     
     // Remove confirm button after payment
-    const confirmButton = document.getElementById('payzee-confirm-button');
+    const confirmButton = document.getElementById('veilance-confirm-button');
     if (confirmButton) {
       confirmButton.remove();
     }
@@ -1114,7 +1114,7 @@ function showLoadingModal(message = 'USDC payment in progress') {
   if (!document.body) return null;
   
   const modal = document.createElement('div');
-  modal.id = 'payzee-loading-modal';
+  modal.id = 'veilance-loading-modal';
   modal.style.cssText = `
     position: fixed;
     top: 0;
@@ -1147,7 +1147,7 @@ function showLoadingModal(message = 'USDC payment in progress') {
     border-top: 4px solid black;
     border-radius: 50%;
     margin: 0 auto 20px;
-    animation: payzee-spin 1s linear infinite;
+    animation: veilance-spin 1s linear infinite;
   `;
   
   const text = document.createElement('div');
@@ -1169,7 +1169,7 @@ function showLoadingModal(message = 'USDC payment in progress') {
   // Add spinner animation
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes payzee-spin {
+    @keyframes veilance-spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
@@ -1187,7 +1187,7 @@ function showLoadingModal(message = 'USDC payment in progress') {
 
 // Function to hide loading modal
 function hideLoadingModal() {
-  const modal = document.getElementById('payzee-loading-modal');
+  const modal = document.getElementById('veilance-loading-modal');
   if (modal && modal.parentNode) {
     modal.remove();
   }
@@ -1198,7 +1198,7 @@ function showConfirmationModal(paymentDetails, productDetails) {
   if (!document.body) return;
 
   const modal = document.createElement('div');
-  modal.id = 'payzee-confirmation-modal';
+  modal.id = 'veilance-confirmation-modal';
   modal.style.cssText = `
     position: fixed;
     top: 0;
@@ -1365,7 +1365,7 @@ function showConfirmationModal(paymentDetails, productDetails) {
     </div>
 
     <div style="margin-top: 32px; text-align: center;">
-      <button id="payzee-close-confirmation" style="
+      <button id="veilance-close-confirmation" style="
         padding: 16px 48px;
         background: black;
         color: white;
@@ -1386,7 +1386,7 @@ function showConfirmationModal(paymentDetails, productDetails) {
   document.body.appendChild(modal);
 
   // Close button handler
-  document.getElementById('payzee-close-confirmation').addEventListener('click', () => {
+  document.getElementById('veilance-close-confirmation').addEventListener('click', () => {
     modal.remove();
   });
 
@@ -1432,7 +1432,7 @@ function showNotification(message, type = 'info') {
 // Initialize extension
 function init() {
   if (isCheckoutPage()) {
-    console.log('Payzee: Checkout page detected');
+    console.log('Veilance: Checkout page detected');
     setTimeout(() => {
       createPayButton();
     }, 1000);
@@ -1446,4 +1446,4 @@ if (document.readyState === 'loading') {
   init();
 }
 
-console.log('Payzee: Extension ready');
+console.log('Veilance: Extension ready');

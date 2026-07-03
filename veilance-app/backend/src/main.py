@@ -1,5 +1,5 @@
 """
-Payzee Backend API
+Veilance Backend API
 
 FastAPI application for the crypto-to-fiat payment bridge.
 Manages virtual card creation, payment processing, and webhook handling.
@@ -240,7 +240,7 @@ class SimulateClearingResponse(BaseModel):
 # =============================================================================
 
 app = FastAPI(
-    title="Payzee Backend API",
+    title="Veilance Backend API",
     description="Backend API for crypto-to-fiat payment bridge with Lithic integration",
     version="0.1.0",
     docs_url="/docs",
@@ -284,7 +284,7 @@ def root():
     static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static", "index.html")
     if os.path.exists(static_path):
         return FileResponse(static_path)
-    return {"message": "payzee Backend API", "docs": "/docs"}
+    return {"message": "Veilance Backend API", "docs": "/docs"}
 
 
 @app.get(
