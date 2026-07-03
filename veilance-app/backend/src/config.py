@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     # -------------------------------------------------------------------------
     verifier_contract_id: str = "CD5MQ4EP23KKSCWZ3ZBX673BFV4OHJEOA3XQBBWG4VDAYECM34U6EZYL"
     stellar_rpc_url: str = "https://soroban-testnet.stellar.org"
-    stellar_platform_secret: str = ""  # Platform keypair for USDC refunds
+    stellar_platform_secret: str = ""  # Platform keypair for XLM refunds
     stellar_escrow_contract: str = ""  # Escrow contract (not yet deployed)
 
     # -------------------------------------------------------------------------

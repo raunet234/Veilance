@@ -104,7 +104,7 @@ DATABASE_URL=sqlite:///./stellar_pay.db
 | `LITHIC_ENVIRONMENT` | Yes | `sandbox` for testing, `production` for real cards |
 | `VERIFIER_CONTRACT_ID` | Yes | Deployed Soroban verifier contract ID |
 | `STELLAR_RPC_URL` | Yes | Soroban RPC endpoint |
-| `STELLAR_PLATFORM_SECRET` | No | Stellar secret key for sending USDC refunds |
+| `STELLAR_PLATFORM_SECRET` | No | Stellar secret key for sending XLM refunds |
 | `LITHIC_WEBHOOK_SECRET` | No | HMAC secret for verifying Lithic webhook signatures |
 | `DATABASE_URL` | No | Database connection string (defaults to SQLite) |
 
@@ -137,7 +137,7 @@ Dashboard runs at http://localhost:3001
 ### Requirements
 
 - **Freighter wallet** browser extension must be installed and connected to Stellar testnet
-- The wallet account needs some XLM balance (for the demo, XLM balance is used as a proxy for USDC)
+- The wallet account needs some XLM balance (fund via testnet friendbot)
 - Fund a testnet account at https://friendbot.stellar.org
 
 ## 3. Chrome Extension Setup

@@ -29,7 +29,7 @@ function Dashboard() {
 
     const [walletAddress, setWalletAddress] = useState('')
 
-    // Balance (in cents, 1 XLM = $1.00 for demo)
+    // Balance in stroops (1 XLM = 10,000,000 stroops), displayed as whole XLM
     const [escrowBalance, setEscrowBalance] = useState(null)
     const [isFetchingBalance, setIsFetchingBalance] = useState(false)
 
@@ -85,7 +85,7 @@ function Dashboard() {
         if (urlDomain) setMerchantDomain(urlDomain)
         if (urlOriginalAmount) {
             setOriginalAmount(urlOriginalAmount)
-            setStatus(`Converted ${urlOriginalAmount} to $${parseFloat(urlAmount).toFixed(2)} USD`)
+            setStatus(`Converted ${urlOriginalAmount} to ${parseFloat(urlAmount).toFixed(2)} XLM`)
         } else if (urlMerchant) {
             setStatus(`Payment for ${urlMerchant}`)
         }
@@ -116,7 +116,7 @@ function Dashboard() {
             const data = await res.json()
             const xlmBalance = data.balances.find(b => b.asset_type === 'native')
             const xlmAmount = parseFloat(xlmBalance?.balance || '0')
-            // 1 XLM = $1.00 in demo, balance stored in cents
+            // Store raw XLM amount (in cents for internal math: 1 XLM = 100 cents)
             const cents = Math.floor(xlmAmount * 100)
             setEscrowBalance(cents)
         } catch (err) {
@@ -240,7 +240,7 @@ function Dashboard() {
         }
 
         if (escrowBalance !== null && amountCents > escrowBalance) {
-            setError(`Insufficient balance: $${(escrowBalance / 100).toFixed(2)} available`)
+            setError(`Insufficient balance: ${(escrowBalance / 100).toLocaleString()} XLM available`)
             return
         }
 
@@ -396,12 +396,12 @@ function Dashboard() {
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                             }}>
-                                <span style={{ fontSize: '0.85rem', color: '#888' }}>Your escrow balance</span>
+                                <span style={{ fontSize: '0.85rem', color: '#888' }}>Your XLM balance</span>
                                 {isFetchingBalance ? (
                                     <span style={{ color: '#666', fontSize: '0.85rem' }}>Loading...</span>
                                 ) : escrowBalance !== null ? (
                                     <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4ade80' }}>
-                                        ${(escrowBalance / 100).toFixed(2)}
+                                        {(escrowBalance / 100).toLocaleString()} XLM
                                     </span>
                                 ) : (
                                     <span style={{ color: '#666', fontSize: '0.85rem' }}>—</span>
@@ -413,7 +413,7 @@ function Dashboard() {
                             <>
                                 {/* Spend amount */}
                                 <div className="amount-input">
-                                    <label htmlFor="amount">Spend amount (USD)</label>
+                                    <label htmlFor="amount">Spend amount (XLM)</label>
                                     <input
                                         id="amount"
                                         type="number"
@@ -582,7 +582,7 @@ function Dashboard() {
                                             {/* Amount + Veilance */}
                                             <div style={{ textAlign: 'right' }}>
                                                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#4ade80', letterSpacing: '-0.5px' }}>
-                                                    ${(virtualCard.amount_cents / 100).toFixed(2)}
+                                                    {(virtualCard.amount_cents / 100).toLocaleString()} XLM
                                                 </div>
                                                 <div style={{ fontSize: '10px', fontWeight: 600, color: 'rgba(255,255,255,0.3)', letterSpacing: '1px', marginTop: '2px' }}>
                                                     VEILANCE

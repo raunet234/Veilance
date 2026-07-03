@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Veilance lets users spend USDC at any online checkout by converting it into a single-use virtual Visa card. The user proves they have sufficient balance using a zero-knowledge proof, the proof is verified on-chain via a Soroban smart contract on Stellar, and a virtual card is issued through Lithic. No merchant integration is required — if a website accepts Visa, Veilance works.
+Veilance lets users spend XLM at any online checkout by converting it into a single-use virtual Visa card. The user proves they have sufficient balance using a zero-knowledge proof, the proof is verified on-chain via a Soroban smart contract on Stellar, and a virtual card is issued through Lithic. No merchant integration is required — if a website accepts Visa, Veilance works.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -66,7 +66,7 @@ fn main(balance: u64, spend_amount: pub u64) {
 }
 ```
 
-- **Private witness**: `balance` — the user's actual USDC balance. Never leaves the browser.
+- **Private witness**: `balance` — the user's actual XLM balance. Never leaves the browser.
 - **Public input**: `spend_amount` — the amount the user wants to spend. Visible to the verifier.
 - **Compiled with**: `nargo compile` → `bb write_vk --scheme ultra_honk --oracle_hash keccak`
 - **Proof scheme**: UltraHonk (Keccak variant), required for Soroban's BN254 host functions.
@@ -101,7 +101,7 @@ Python backend that orchestrates the payment flow:
 | `main.py` | FastAPI app, route definitions, request/response schemas, webhook handler |
 | `config.py` | Pydantic Settings — loads `.env`, validates types |
 | `models.py` | SQLModel ORM — `VirtualCard` table with full lifecycle tracking |
-| `services/stellar.py` | Soroban RPC calls (`simulateTransaction` for proof verification), USDC refunds |
+| `services/stellar.py` | Soroban RPC calls (`simulateTransaction` for proof verification), XLM refunds |
 | `services/lithic.py` | Lithic SDK wrapper — card creation, authorization/clearing simulation |
 
 **Proof verification** uses `simulateTransaction` (read-only, no fees, no funded account needed). This invokes the on-chain verifier contract without submitting an actual transaction.
@@ -136,7 +136,6 @@ Manifest V3 content script that runs on all pages. It:
 ```
 Step 1: User connects Freighter wallet on the dashboard
          └→ Dashboard fetches XLM balance from Horizon API
-            (used as a proxy for USDC balance in demo mode)
 
 Step 2: User enters spend amount (e.g., $5.00 = 500 cents)
          └→ Dashboard auto-generates ZK proof in WASM:
@@ -169,7 +168,7 @@ Step 7: Extension auto-fills checkout form OR shows copy panel
 |--------|-----|
 | **Noir + UltraHonk** | First-class Soroban support via `ultrahonk-soroban-verifier`. UltraHonk proofs are compact (14.5 KB) and leverage Stellar's native BN254 host functions for efficient on-chain verification. |
 | **Keccak oracle hash** | Required by Soroban's BN254 host functions. Poseidon is also supported but Keccak was chosen for compatibility with the existing verifier crate. |
-| **Stellar / Soroban** | Native BN254 cryptographic primitives (CAP-80) make on-chain ZK verification feasible without excessive compute costs. USDC is natively available on Stellar. |
+| **Stellar / Soroban** | Native BN254 cryptographic primitives (CAP-80) make on-chain ZK verification feasible without excessive compute costs. XLM is the native asset on Stellar — no token trust lines needed for the demo. |
 | **Lithic** | Purpose-built API for programmatic virtual card issuance. Supports SINGLE_USE cards with per-transaction spend limits — exactly what a payment bridge needs. |
 | **FastAPI** | Async-ready Python framework with auto-generated OpenAPI docs. Fast to develop, integrates well with `stellar-sdk` and `lithic` Python packages. |
 | **In-browser proof gen** | Privacy-critical: the user's actual balance (private witness) never leaves the browser. The backend only sees the proof and the public spend amount. |
@@ -185,7 +184,7 @@ Online checkout totals are unpredictable — tax, shipping, and tips get added a
 1. The card is created with a **5% buffer** above the requested amount (e.g., $100 → $105 limit)
 2. The merchant charges the actual amount (e.g., $102.40)
 3. A Lithic webhook (`transaction.settled`) fires with the actual charged amount
-4. The backend calculates `$105 - $102.40 = $2.60` and refunds unused buffer as USDC to the user's Stellar wallet
+4. The backend calculates `$105 - $102.40 = $2.60` and refunds unused buffer as XLM to the user's Stellar wallet
 
 This approach avoids declined transactions from unexpected surcharges while automatically returning unused funds.
 

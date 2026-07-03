@@ -45,13 +45,13 @@ Initiate a new payment session. Returns details needed to build the Stellar depo
 {
   "session_id": "uuid",
   "escrow_account": "CD5MQ4EP...",
-  "amount_usdc": 5.25,
+  "amount_xlm": 5.25,
   "expires_at": "2026-07-03T00:14:09Z",
   "merchant_address": "GBCJ..."
 }
 ```
 
-> **Note**: `amount_usdc` includes a 5% buffer (e.g., $5.00 → $5.25).
+> **Note**: `amount_xlm` includes a 5% buffer (e.g., 5.00 XLM → 5.25 XLM).
 
 ---
 
@@ -261,7 +261,7 @@ Receives real-time events from Lithic. Not listed in Swagger (hidden from public
 
 | Event | Action |
 |-------|--------|
-| `transaction.settled` | Calculates unused buffer, sends USDC refund to user's Stellar wallet |
+| `transaction.settled` | Calculates unused buffer, sends XLM refund to user's Stellar wallet |
 | `transaction.authorization` | Logged |
 | `card.state_changed` | Logged |
 

@@ -1,8 +1,8 @@
 # Veilance
 
-**Spend USDC at any online checkout — without revealing your balance.**
+**Spend XLM at any online checkout — without revealing your balance.**
 
-Veilance generates a zero-knowledge proof that your Stellar wallet holds enough USDC, verifies it on-chain via a Soroban smart contract, and issues a single-use virtual Visa card. No merchant integration, no KYC, no bank account.
+Veilance generates a zero-knowledge proof that your Stellar wallet holds enough XLM, verifies it on-chain via a Soroban smart contract, and issues a single-use virtual Visa card. No merchant integration, no KYC, no bank account.
 
 ---
 
@@ -46,7 +46,7 @@ Veilance uses a Noir ZK circuit to prove `balance ≥ spend_amount` without disc
 3. **Verify** — Backend calls the Soroban verifier contract via `simulateTransaction` (read-only, no fees)
 4. **Issue** — Lithic creates a SINGLE_USE virtual Visa card with a 5% spending buffer
 5. **Pay** — Chrome extension auto-fills card details at checkout, or user copies them manually
-6. **Refund** — After the merchant charges, unused buffer is automatically refunded as USDC to the user's Stellar wallet
+6. **Refund** — After the merchant charges, unused buffer is automatically refunded as XLM to the user's Stellar wallet
 
 ## Screenshots
 

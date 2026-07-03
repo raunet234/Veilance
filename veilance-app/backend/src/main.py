@@ -162,7 +162,7 @@ class InitiatePaymentResponse(BaseModel):
     
     session_id: str = Field(..., description="Unique session ID for this payment")
     escrow_account: str = Field(..., description="Escrow contract package ID")
-    amount_usdc: float = Field(..., description="Amount in USDC to deposit")
+    amount_usdc: float = Field(..., description="Amount in XLM to deposit")
     expires_at: datetime = Field(..., description="Session expiration time")
     merchant_address: Optional[str] = Field(None, description="Merchant's Stellar address")
 
@@ -619,12 +619,12 @@ def create_card(
     The 5% buffer protects against:
     - Tax calculations applied at checkout (often 5-10%)
     - Shipping fees added after card entry
-    - USDC peg slippage ($0.998 instead of $1.00)
+    - XLM price slippage
     - Merchant tips, service fees, or surcharges
     - Pre-authorization holds (gas stations, hotels)
     
     Example: User pays for $100 item
-    - User authorizes: 105 USDC from Stellar wallet
+    - User authorizes: 105 XLM from Stellar wallet
     - Card limit set: $105.00
     - Merchant charges: $102.40 (with tax)
     - Unused buffer: $2.60 → Auto-refunded to user via Stellar
@@ -640,7 +640,7 @@ def create_card(
     )
     
     # Calculate spend limit with buffer (default 5%)
-    # Example: $100 item → User authorizes 105 USDC → Card limit $105.00
+    # Example: 100 XLM item → User authorizes 105 XLM → Card limit $105.00
     # Merchant charges actual amount (e.g., $102.40)
     # Unused $2.60 will be refunded via webhook handler
     spend_limit_cents = int(request.amount_cents * (1 + slippage_percent / 100))
@@ -992,7 +992,7 @@ async def lithic_webhook(
     For Buffer & Refund strategy:
     1. Receive transaction.settled event
     2. Calculate: spend_limit - actual_charged
-    3. If difference > 0, send USDC refund via Stellar
+    3. If difference > 0, send XLM refund via Stellar
     4. Update card record with refund details
     """
     # Get raw body for signature verification
@@ -1054,7 +1054,7 @@ async def handle_transaction_settled(
     When merchant's charge settles, we:
     1. Find the card in our database
     2. Calculate unused buffer
-    3. Send USDC refund to user's Stellar wallet
+    3. Send XLM refund to user's Stellar wallet
     4. Update database with refund details
     
     Args:
@@ -1099,7 +1099,7 @@ async def handle_transaction_settled(
     # Only refund if there's unused buffer (positive amount)
     if refund_cents > 0 and card.user_stellar_address:
         try:
-            # Send USDC refund via Stellar
+            # Send XLM refund via Stellar
             refund_result = stellar_service.send_usdc_refund(
                 destination_address=card.user_stellar_address,
                 amount_cents=refund_cents,
@@ -1114,7 +1114,7 @@ async def handle_transaction_settled(
             session.commit()
             
             logger.info(
-                f"Refund successful: {refund_cents/100:.2f} USDC "
+                f"Refund successful: {refund_cents/100:.2f} XLM "
                 f"to {card.user_stellar_address[:8]}... "
                 f"TX: {refund_result['tx_hash'][:16]}..."
             )

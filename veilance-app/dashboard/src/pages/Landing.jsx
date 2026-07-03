@@ -76,7 +76,7 @@ export default function Landing() {
 
         {/* Subtext */}
         <p className="text-[clamp(15px,1.6vw,18px)] font-normal text-[#777] max-w-[560px] leading-[1.65] mb-14 relative z-10">
-          Turn your USDC into a virtual card and pay at any online checkout.
+          Turn your XLM into a virtual card and pay at any online checkout.
           No bank account needed—just connect your Stellar wallet and spend
           crypto like cash.
         </p>
@@ -109,7 +109,7 @@ export default function Landing() {
           <div className="flex items-center gap-8 flex-wrap justify-center">
             <span className="text-[14px] font-semibold text-[#3a3a3a]">Stellar Network</span>
             <span className="text-[#333]">·</span>
-            <span className="text-[14px] font-semibold text-[#3a3a3a]">USDC</span>
+            <span className="text-[14px] font-semibold text-[#3a3a3a]">XLM</span>
             <span className="text-[#333]">·</span>
             <span className="text-[14px] font-semibold text-[#3a3a3a]">Lithic Cards</span>
             <span className="text-[#333]">·</span>
@@ -185,7 +185,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               { n: '01', icon: '🔗', title: 'Connect wallet', body: 'Link your Stellar wallet via Freighter in seconds.' },
-              { n: '02', icon: '🔒', title: 'Deposit USDC', body: 'Send USDC to the Stellar escrow address and save the transaction hash.' },
+              { n: '02', icon: '🔒', title: 'Deposit XLM', body: 'Send XLM to the Stellar escrow address and save the transaction hash.' },
               { n: '03', icon: '🔐', title: 'Generate ZK proof', body: 'Prove your balance ≥ spend amount without revealing it. Paste the proof into the dashboard.' },
               { n: '04', icon: '💳', title: 'Get a virtual card', body: 'Veilance verifies your proof on-chain and instantly issues a single-use Visa card.' },
             ].map(s => (
@@ -243,7 +243,7 @@ export default function Landing() {
             {/* Flow nodes */}
             <div className="flex items-center gap-0 flex-wrap justify-center">
               {[
-                { label: 'Your Wallet', sub: 'Stellar USDC', icon: '⬡' },
+                { label: 'Your Wallet', sub: 'Stellar XLM', icon: '⬡' },
                 { label: 'ZK Circuit', sub: 'Noir UltraHonk', icon: '◈' },
                 { label: 'Soroban Contract', sub: 'On-chain Verifier', icon: '▣' },
                 { label: 'Virtual Card', sub: 'Single-use VISA', icon: '▤' },
@@ -266,7 +266,7 @@ export default function Landing() {
             {/* Flow description */}
             <div className="mt-8 p-4 md:px-6 bg-[#4ade80]/[0.06] border border-[#4ade80]/[0.12] rounded-lg font-mono text-xs text-[#777] leading-relaxed">
               <span className="text-[#4ade80]">// Flow: </span>
-              User deposits USDC → Generates Noir ZK proof (balance ≥ spend) → Backend verifies proof on Stellar →
+              User deposits XLM → Generates Noir ZK proof (balance ≥ spend) → Backend verifies proof on Stellar →
               Lithic issues single-use card → User pays merchant → Unused buffer auto-refunded
             </div>
           </div>

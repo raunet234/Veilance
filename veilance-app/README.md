@@ -1,6 +1,6 @@
 # Veilance
 
-A crypto-to-fiat payment bridge that lets users pay at any online checkout using USDC. Generate a ZK proof of your balance on Stellar → get a virtual Visa card → pay anywhere.
+A crypto-to-fiat payment bridge that lets users pay at any online checkout using XLM. Generate a ZK proof of your balance on Stellar → get a virtual Visa card → pay anywhere.
 
 ## How It Works
 

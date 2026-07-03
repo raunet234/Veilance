@@ -5,7 +5,7 @@ Service for interacting with the Stellar network.
 
 Handles:
 - ZK proof verification via the deployed Soroban verifier contract
-- USDC refund transactions back to user wallets (Buffer & Refund strategy)
+- XLM refund transactions back to user wallets (Buffer & Refund strategy)
 """
 import logging
 from decimal import Decimal
@@ -39,10 +39,10 @@ class StellarService:
     """
     Service for interacting with Stellar network.
     
-    Handles USDC refund transactions back to user wallets.
+    Handles XLM refund transactions back to user wallets.
     """
 
-    # Circle USDC on Stellar Mainnet
+    # Not used in testnet demo (native XLM is used instead)
     USDC_ISSUER = "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
     USDC_ASSET_CODE = "USDC"
     
@@ -93,7 +93,7 @@ class StellarService:
         memo: Optional[str] = None,
     ) -> dict:
         """
-        Send USDC refund to user's Stellar wallet.
+        Send XLM refund to user's Stellar wallet.
         
         Args:
             destination_address: User's Stellar public key (G...)
@@ -117,12 +117,12 @@ class StellarService:
         if not self.platform_keypair:
             raise ValueError("Platform secret key not configured")
         
-        # Convert cents to USDC amount
-        # Example: 250 cents = $2.50 USDC
+        # Convert cents to XLM amount
+        # Example: 250 cents = 2.50 XLM
         amount_usdc = Decimal(amount_cents) / Decimal(100)
         amount_str = str(amount_usdc)
         
-        logger.info(f"Sending {amount_str} USDC refund to {destination_address}")
+        logger.info(f"Sending {amount_str} XLM refund to {destination_address}")
         
         try:
             # Load platform account
@@ -130,8 +130,8 @@ class StellarService:
                 self.platform_keypair.public_key
             )
             
-            # Create USDC asset
-            usdc = Asset(self.USDC_ASSET_CODE, self.usdc_issuer)
+            # Create native XLM asset for refund
+            usdc = Asset.native()
             
             # Build transaction
             transaction_builder = TransactionBuilder(
