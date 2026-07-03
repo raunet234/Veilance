@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Payzee",
+  "version": "1.0.8",
+  "description": "Pay at any checkout using USDC on Stellar - ZK proof verified payments",
+
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

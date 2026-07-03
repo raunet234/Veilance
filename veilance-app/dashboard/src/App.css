@@ -1,0 +1,418 @@
+/* =============================================================================
+   Payzee Dashboard — Dark Theme (matches Landing page)
+   ============================================================================= */
+
+.App {
+  min-height: 100vh;
+  background: #080808;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 24px;
+}
+
+.container {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.header h1 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 6px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  color: #666;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* ── Merchant Info ── */
+.merchant-info {
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.merchant-info h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.merchant-info .domain {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ── Connect Section ── */
+.connect-section {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.connect-section button,
+.connect-section [class*="wkit-button"],
+.connect-section [class*="ConnectButton"] {
+  background: #fff !important;
+  color: #080808 !important;
+  border: none !important;
+  border-radius: 100px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  padding: 14px 32px !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.connect-section button:hover {
+  opacity: 0.88 !important;
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* ── Wallet Info ── */
+.wallet-info {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 20px;
+  border-radius: 12px;
+}
+
+.connected-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.disconnect-button {
+  padding: 6px 14px;
+  font-size: 13px;
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.disconnect-button:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.address {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+
+/* ── Payment Section ── */
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Amount Input ── */
+.amount-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.amount-input label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #999;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.amount-input input {
+  padding: 14px 16px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.amount-input input::placeholder {
+  color: #444;
+}
+
+.amount-input input:focus {
+  outline: none;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.amount-input input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Pay Button ── */
+.pay-button {
+  width: 100%;
+  padding: 16px;
+  background: #fff;
+  color: #080808;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.pay-button:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.pay-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Card Created Section ── */
+.card-created {
+  background: #111;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  padding: 24px;
+  border-radius: 14px;
+}
+
+.card-created h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #4ade80;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.1);
+  border-radius: 10px;
+  margin-bottom: 4px;
+}
+
+.card-info p {
+  font-size: 14px;
+  color: #ccc;
+  margin: 0;
+}
+
+.card-info strong {
+  color: #999;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Card Details for Checkout — override inline styles */
+.card-created div[style] h4 {
+  color: #fff !important;
+}
+
+.card-created div[style] label {
+  color: #888 !important;
+}
+
+.card-created div[style] code {
+  background: #1a1a1a !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+.card-created div[style] button {
+  background: #4ade80 !important;
+  color: #080808 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.card-created div[style] > p {
+  background: rgba(74, 222, 128, 0.08) !important;
+  border-color: rgba(74, 222, 128, 0.2) !important;
+  color: #999 !important;
+}
+
+.card-created div[style] > p strong {
+  color: #ccc !important;
+}
+
+.card-note {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 16px;
+  color: #777;
+}
+
+.card-note strong {
+  color: #ccc;
+}
+
+/* ── Payment Complete ── */
+.payment-complete {
+  text-align: center;
+  padding: 20px;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+.payment-complete h3 {
+  color: #4ade80;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.payment-complete p {
+  color: #999;
+  font-size: 14px;
+}
+
+/* ── Status & Error ── */
+.status {
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.footer p {
+  font-size: 12px;
+  color: #444;
+  letter-spacing: 0.5px;
+}
+
+/* ── Loading Modal ── */
+.loading-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.loading-content {
+  background: #111;
+  padding: 40px 60px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #4ade80;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-content h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.loading-content p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .App {
+    padding: 32px 16px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .card-created {
+    padding: 18px;
+  }
+}

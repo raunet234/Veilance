@@ -1,0 +1,37 @@
+# =============================================================================
+# Payzee Backend - Python Project Configuration
+# =============================================================================
+
+[project]
+name = "payzee-backend"
+version = "0.1.0"
+description = "Backend API for crypto-to-fiat payment bridge with Lithic integration"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    # Web framework
+    "fastapi[standard]>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+
+    # Database
+    "sqlmodel>=0.0.25",
+
+    # Configuration
+    "pydantic-settings>=2.11.0",
+    "python-dotenv>=1.1.0",
+
+    # External APIs
+    "lithic>=0.107.0",      # Virtual card provider
+    "requests>=2.32.0",      # HTTP client
+
+    # Blockchain (legacy Stellar support)
+    "stellar-sdk>=9.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,3 +1,3 @@
-fn main(a: Field, b: pub Field) {
-    assert(a as u64 >= b as u64);
+fn main(balance: u64, spend_amount: pub u64) {
+    assert(balance >= spend_amount);
 }
