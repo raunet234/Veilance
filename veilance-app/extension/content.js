@@ -664,7 +664,7 @@ function showCardDetailsPanel(card) {
   panel.innerHTML = `
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.06);">
       <span style="font-size: 14px; font-weight: 700; color: #fff;">
-        Pay<span style="color: #4ade80;">zee</span> — Your Card
+        <span style="color: #4ade80;">Veilance</span> — Your Card
       </span>
       <button id="veilance-card-panel-close" style="background: none; border: none; color: #555; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1;">✕</button>
     </div>
